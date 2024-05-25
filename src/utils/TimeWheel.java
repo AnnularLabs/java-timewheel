@@ -86,6 +86,7 @@ public class TimeWheel {
      * @param executeAt
      */
     public void addTask(String key, Runnable task, Instant executeAt) {
+        // 获取在时间轮的位置和循环周期
         int[] posAndCycle = getPosAndCycle(executeAt);
         int pos = posAndCycle[0];
         int cycle = posAndCycle[1];
@@ -93,6 +94,7 @@ public class TimeWheel {
 
         synchronized (this) {
             LinkedList<TaskElement> slot = slots.get(pos);
+            // 将task添加到对应的pos中
             slot.add(taskElement);
             keyToTask.put(key, taskElement);
         }
@@ -105,8 +107,10 @@ public class TimeWheel {
      */
     public void removeTask(String key) {
         synchronized (this) {
+            // 获取对应的task
             TaskElement taskElement = keyToTask.get(key);
             if (taskElement != null) {
+                // 找到pos删除即可
                 slots.get(taskElement.getPos()).remove(taskElement);
             }
         }
